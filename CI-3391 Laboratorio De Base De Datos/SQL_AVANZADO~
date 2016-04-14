@@ -1,0 +1,189 @@
+--------------------------------------------------------------------------------
+--------------- SQL: LENGUAJE DE INTERROGACION ESTRUCTURADO --------------------
+--------------------------------------------------------------------------------
+
+------------------------- ORDENAMIENTO EN SQL ----------------------------------
+
+	'ESTRUCTURA DE BLOQUE'
+
+		SELECT ... FROM ... WHERE
+		ORDER BY <lista de atributos>
+	
+		'SEMANTICA' 
+	
+			-- Ordena el resultado ascendentemente segn los atributod
+		
+			'EJEMPLO: ¿DATOS DE LIBROS DE UNILIT, ORDENADOS POR AUTOR Y TITULO?'
+		
+				SELECT *
+				FROM LIBRO
+				WHERE editorial = 'UNILIT'
+				ORDER BY autor.nombre
+				
+---------------------------- SUBQUERIES "UNITARIOS" ----------------------------
+
+	'ESTRUCTURA DE CONDICION'
+	
+		<lista de atributos> <comparador>
+		(SELECT ... FROM ... WHERE ... )
+		
+		'SEMANTICA'
+		
+			-- EL RESULTADO DEL SUBQUERY TIENE LA MISMA ESTRUCTURA QUE LOS 
+			-- ATRIBUTOS (ESTRUCTURA COMPATIBLE)
+			-- EL SUBQUERY DEVUELVE UN SOLO VALOR
+			-- COMPRA LA TUPLA CON RESULTADO DEL SUBUERY
+			
+		'EJEMPLO: ¿LIBROS DEL AUTOR Y EDITOR DE "HOMBRE ERES LIBRE"?'
+		
+			SELECT * FROM LIBRO
+			WHERE (autor.editorial) =
+			(SELECT autor.editorial FROM LIBRO
+			WHERE nombre = 'Hombre Eres Libre')
+
+---------------------------- SUBQUERIES CON IN   -------------------------------
+
+	'ESTRUCTURA DE CONDICION'
+	
+		<lista de atributos> IN
+		(SELECT ... FROM ... WHERE ... )
+	
+		'SEMANTICA'
+		
+			-- ESTRUCTURA COMPATIBLE
+			-- VERIFICA MEMBRESIA DE LA TUPLA AL RESULTADO DEL QUERY		
+			
+		'EJEMPLO: ¿AUTOR Y EDITOR DE LIBROS QUE LE GUSTAN A LEONID?'
+
+			SELECT autor.editor FROM LIBRO
+			WHERE codigo IN
+				(SELECT codlib FROM LECTOR.Gusta
+				 WHERE nombre = 'Leonid' AND ci = cilec)
+				 						
+---------------------------- SUBQUERIES CON ANY --------------------------------
+
+	'ESTRUCTURA DE CONDICION'
+	
+		<lista de atributos> <comparador> ANY
+		(SELECT ... FROM ... WHERE ... )
+	
+		'SEMANTICA'
+		
+			-- ESTRUCTURA COMPATIBLE
+			-- EXISTE UNA TUPLA DEL SUBQUERY QUE SATISFAGA EL COMPARADOR DE LA 
+			-- TUPLA		
+			
+		'EJEMPLO: ¿LIBROS QUE NO SON DEL MAS ALTO PRECIO?'
+
+			SELECT nombre FROM LIBRO.Ofrece
+			WHERE codigo = codlib AND
+				precio < ANY(SELECT precio FROM Ofrece)
+			
+			
+---------------------------- SUBQUERIES CON ALL --------------------------------
+
+	'ESTRUCTURA DE CONDICION'
+	
+		<lista de atributos> <comparador> ALL
+		(SELECT ... FROM ... WHERE ... )
+	
+		'SEMANTICA'
+		
+			-- ESTRUCTURA COMPATIBLE
+			-- TODAS LAS TUPLA DEL SUBQUERY QUE SATISFACEN EL COMPARADOR DE LA 
+			-- TUPLA
+			
+		'EJEMPLO: ¿EL (LOS) TITULO(S) MAS RECIENTES?'
+
+			SELECT nombre FROM LIBRO
+			WHERE fecha >= ALL(SELECT fecha FROM LIBRO)
+			
+
+---------------------------- SUBQUERIES CON EXIST --------------------------------
+
+	'ESTRUCTURA DE CONDICION'
+	
+		EXISTS(SELECT ... FROM ... WHERE ... )
+	
+		'SEMANTICA'
+		
+			-- EL RESULTADO DEL SUBQURY NO ES VACIO
+			
+		'EJEMPLO: ¿AUTORES QUE TIENEN UN SOLO LIBRO?'
+
+			SELECT autor FROM LIBRO L
+			WHERE NOT EXISTS (
+				SELECT * FROM LIBRO
+				WHERE autor = L.autor AND
+					codigo <> L.codigo)			
+					
+		NOTA: QUERY CORRELATIVO
+		
+
+-------------------------------- UNION -----------------------------------------
+
+	'ESTRUCTURA DE QUERY'
+	
+	(SELECT ... FROM ... WHERE ... )
+	UNION
+	(SELECT ... FROM ... WHERE
+	
+		'SEMANTICA'
+			
+		'EJEMPLO'	
+
+
+---------------------------- DIFERENCIAS ------ --------------------------------
+
+	'ESTRUCTURA DE CONDICION'
+	
+		(SELECT ... FROM ... WHERE ... )
+		EXCEPT
+		(SELECT ... FROM ... WHERE ... )
+	
+		'SEMANTICA'
+		
+			-- ESTRUCTURA COMPATIBLE
+			-- TODAS LAS TUPLA DEL SUBQUERY QUE SATISFACEN EL COMPARADOR DE LA 
+			-- TUPLA
+
+		'EJEMPLO: LISTE LOS CARNETS, NOMBRES Y APELLIDOS DE LOS ESTUDIANTES 
+		CON MENOR INDICE DE CADA IDCARRERA'
+
+			SELECT ep.idcarrera,ep.carnet,ep.nombres,ep.apellidos
+			FROM ESTUDIANTE ep
+			EXCEPT
+			SELECT e1.idcarrera,e1.carnet,e1.nombres,e1.apellidos
+			FROM ESTUDIANTE e1,ESTUDIANTE e2
+			WHERE (e1.idcarrera = e2.idcarrera)
+				AND (e1.indice > e2.indice)					
+
+---------------------------- DIVISION  -----------------------------------------
+
+	'ESTRUCTURA DE CONDICION'
+	
+		(SELECT ... FROM ... WHERE ... )
+		EXCEPT
+		(SELECT ... FROM ... WHERE ... )
+	
+		'SEMANTICA'
+		
+			-- ESTRUCTURA COMPATIBLE
+			-- TODAS LAS TUPLA DEL SUBQUERY QUE SATISFACEN EL COMPARADOR DE LA 
+			-- TUPLA
+
+		'EJEMPLO: ENCUENTRA UN ALUMNO QUE HA CURSADO TODAS LAS MATERIAS DE TIPO
+		 ELECTIVA'
+
+			SELECT nombre
+			FROM ESTUDIANTE AS e
+			WHERE NOT EXISTS
+				(SELECT codasi FROM asignatura AS a
+				 WHERE tipo = 'Electiva'
+			AND NOT EXISTS
+			(SELECT *
+			FROM CURSA AS c
+			WHERE (c.cod_alumno = e.carnet)
+				AND (c.cod_asig = codasig))				
+
+

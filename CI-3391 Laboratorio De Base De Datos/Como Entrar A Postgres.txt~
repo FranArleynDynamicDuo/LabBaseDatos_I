@@ -1,0 +1,11 @@
+1) Si es para practicar
+
+	psql "SESIONPRACTICA"
+	(EN LA CARPETA DONDE ESTAN LOS ARCHIVOS)
+	
+2) Para na base de datos especifica
+
+	psql "postgres"
+	CREATE DATABASE "<nombre>"
+	\q
+	psql "<nombre>"

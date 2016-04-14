@@ -1,0 +1,67 @@
+           nomdpto           
+-----------------------------
+ Departamento de Computacion
+ Departamento de Sociales
+(2 rows)
+
+ codasig |            nomasig            |    tipo     
+---------+-------------------------------+-------------
+ AA0004  | El Modernismo                 | Teoria
+ MM0001  | Introduccion a la Computacion | Teoria
+ AA0001  | Introduccion al Arte          | Teoria
+ AA0002  | Historia del Arte             | Teoria
+ MM0003  | Laboratorio de Algoritmos I   | Laboratorio
+ MM0004  | Laboratorio de Redes I        | Laboratorio
+ AA0003  | Analisis de la Pintura        | Teoria
+ MM0002  | Computacion I                 | Teoria
+(8 rows)
+
+ codasig | min | max 
+---------+-----+-----
+ MM0001  |   2 |   4
+ AA0001  |   4 |   5
+(2 rows)
+
+ carnet  | idcarrera | nombres  | apellidos | min  
+---------+-----------+----------+-----------+------
+ 9723456 |         8 | Domingo  | Noriega   | 3.55
+ 9901236 |         9 | Irma     | Alfonso   | 4.75
+ 9712345 |         8 | David    | Pino      | 4.00
+ 9899999 |         9 | Gabriela | Saad      | 4.36
+ 9890123 |         9 | Carmen   | Lopez     | 3.01
+ 9911122 |         9 | Santiago | Cortes    | 3.66
+ 9778901 |         9 | Ricardo  | Peralto   | 3.33
+ 9944444 |         8 | Irene    | Rivas     | 3.98
+ 0055555 |        10 | Marta    | Sanchez   | 4.12
+ 9833333 |         8 | Jose     | Perez     | 3.86
+ 0066666 |         8 | Miguel   | Rojas     | 3.56
+ 0022333 |        10 | Andres   | Sanchez   | 3.92
+ 9788888 |         9 | Gustavo  | Salazar   | 4.25
+ 0033444 |         9 | Camilo   | Ponce     | 3.99
+ 0088999 |         9 | Enrique  | Valles    | 3.68
+ 9834567 |         8 | Manuel   | Garcia    | 3.23
+ 9789012 |         9 | Elvira   | Salinas   | 4.44
+ 0056789 |         8 | Ramon    | Diaz      | 4.55
+ 0067890 |        10 | Marina   | Vidal     | 4.10
+ 0077889 |        10 | Alberto  | Beltran   | 4.17
+ 9722222 |         8 | Luis     | Gomez     | 4.01
+ 9945678 |         8 | Ignacio  | Rovas     | 3.89
+ 9711111 |         8 | Gabriel  | Millan    | 3.75
+ 9777777 |         9 | Rafael   | Millan    | 3.25
+(24 rows)
+
+  ciprof  | nombres | apellidos 
+----------+---------+-----------
+ 87654321 | Pablo   | Suarez
+(1 row)
+
+ carnet  | nombres | apellidos 
+---------+---------+-----------
+ 9711111 | Gabriel | Millan
+ 9712345 | David   | Pino
+ 9722222 | Luis    | Gomez
+ 9723456 | Domingo | Noriega
+ 9833333 | Jose    | Perez
+ 9834567 | Manuel  | Garcia
+(6 rows)
+

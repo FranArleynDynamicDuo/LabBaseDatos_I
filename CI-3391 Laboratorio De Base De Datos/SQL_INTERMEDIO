@@ -1,0 +1,174 @@
+--------------------------------------------------------------------------------
+--------------- SQL: LENGUAJE DE INTERROGACION ESTRUCTURADO --------------------
+--------------------------------------------------------------------------------
+
+------------------------ OPERADORES DE AGREGACION ------------------------------
+
+	ESTRUCUTURA DE BLOQUE:
+		
+		SELECT <AggOpr>(<atributo>) FROM.... WHERE
+		
+			SEMANTICA:
+			
+				SUM: SUMATORIA;
+				AVG: PROMEDIO;
+				MIN: MINIMO;
+				MAX: MAXIMO;
+				COUNT: NUMERO DE TUPLAS (DISTINCT)
+				
+	EJEMPLO: ¿NUMERO DE LIBROS OFRECIDOS POR CLC O EL VERBO?
+	
+		SELECT COUNT(DISTINCT codlib)
+		FROM LIBRERIA, Ofrece
+		WHERE (nombre = 'CLC' OR nombre = 'ElVerbo')
+		AND rif = riflib
+		
+-------------------------- PARTICIONAMIENTO ------------------------------------
+
+	ESTRUCTURA DE BLOQUE
+	
+		SELECT<lista de expresiones>
+		FROM.... WHERE...
+		GROUP BY <lista de atributos>
+		
+			SEMANTICA:
+			
+				Expresiones en SELECT: greg. o atrib. del GROUP BY
+				Particiones segun el GROUP BY, calcula por cada grupo
+		
+	EJEMPLO: ¿PROMEDIO DE PRECIOS POR LIBRERIA?
+	
+		SELECT nombre, AVG(precio)
+		FROM LIBRERIA,Ofrece
+		WHERE rif = riflib
+		GROUP BY nombre
+		
+----------------- CONDICIONES EN PARTICIONAMIENTO ------------------------------
+
+	ESTRUCTURA DE BLOQUE
+	
+		SELECT... FROM... WHERE...
+		GROUP BY ... HAVING<lista de atributos>
+		
+			SEMANTICA:
+			
+				La condicion es una propiedad agregada sobre el grupo
+				Seleciona solo los grupos que cumplen la condicion
+		
+	EJEMPLO: ¿PROMEDIOS DE PRECIOS POR LIBRERIACON MAS DE 1000 TITULOS?
+	
+		SELECT nombre, AVF(precio)
+		FROM LIBRERIA, Ofrece
+		WHERE rif = riflib
+		GROUP BY nombre
+		HAVING COUNT * > 1000
+		
+------------------------------ INSERCIONES -------------------------------------
+
+	ESTRUCTURA DE BLOQUE
+	
+		INSERT INTO <tabla<(<lista de atributos>)
+		VALUES (<lista de valores>)
+		
+			SEMANTICA:
+			
+				-- Valores coinciden con atributos en: #, posicion y tipos
+				-- Puede omitirse la lista de atributos: usa esquema
+				-- Crea nueva tupla con los valores
+				-- NULL para atributos omitidos
+		
+	EJEMPLO: Nuevo libro
+	
+		INSERT INTO LIBRO(codigo,nombre)
+		VALUES (777,'El Rey de los Ejercitos')
+		
+------------------------ INSERCIONES DE CONSULTAS-------------------------------
+
+	ESTRUCTURA DE BLOQUE
+	
+		INSERT INTO <tabla<(<lista de atributos>)
+		<subquery>
+		
+			SEMANTICA:
+			
+				-- Tupla de query y atributos coinciden: #, posicion y tipos
+				-- Crea nuevas tuplas con los resultados del query
+		
+	EJEMPLO: HACER A CLC OFRECER LOS LIBROS UNILIT
+		
+		INSERT INTO Ofrece(codlib,riflib)
+			SELECT codigo, rif
+			FROM LIBRERIA, LIBRO
+			WHERE editorial = 'UNILIT'
+			AND nombre = 'CLC'
+				
+------------------------ ELIMINACIONES -------------------------------
+
+	ESTRUCTURA DE BLOQUE
+	
+		DELETE FROM <tabla>
+		WHERE <condicion>
+		
+			SEMANTICA:
+			
+				-- Elimina de la tabla las tuplas que cumplen la condicion
+		
+	EJEMPLO: ELIMINAR OFERTA DE LIBROS CON EXISTENCIA 0
+		
+		DELETE FROM Ofrece
+		WHERE existencia = 0	
+		
+---------------------------- ACTUALIZACIONES -----------------------------------
+
+	ESTRUCTURA DE BLOQUE
+	
+		UPDATE <tabla>
+		SET <lista de asignaciones>
+		WHERE <condicion>
+		
+			SEMANTICA:
+			
+				-- Cambia los valores de los atributos especificados
+				-- Sobre las tuplas que cumplen la condicion
+		
+	EJEMPLO: DISMINUIR EN 10½ LOS PRECIOS DE UNILIT
+		
+		UPDATE Ofrece
+		SET precio = 0.9 * precio
+		WHERE codilib IN (SELECT codigo FROM LIBRO
+						  WHERE editorial = 'UNILIT')
+		
+---------------------------- ACTUALIZACIONES -----------------------------------
+
+	ESTRUCTURA DE BLOQUE
+	
+		UPDATE <tabla>
+		SET <lista de asignaciones>
+		WHERE <condicion>
+		
+			SEMANTICA:
+			
+				-- Cambia los valores de los atributos especificados
+				-- Sobre las tuplas que cumplen la condicion
+		
+	EJEMPLO: DISMINUIR EN 10½ LOS PRECIOS DE UNILIT
+		
+		UPDATE Ofrece
+		SET precio = 0.9 * precio
+		WHERE codilib IN (SELECT codigo FROM LIBRO
+						  WHERE editorial = 'UNILIT')		
+
+--------------------------------------------------------------------------------				
+-------------------------- ¡CUIDADO! -------------------------------------------
+--------------------------------------------------------------------------------
+
+	1) DUPLICADOS 
+	2) RESTRICCIONES 
+	3) TRIGGERS 
+								
+--------------------------------------------------------------------------------				
+-------------------------- ¡CUIDADO! -------------------------------------------
+--------------------------------------------------------------------------------
+
+
+						

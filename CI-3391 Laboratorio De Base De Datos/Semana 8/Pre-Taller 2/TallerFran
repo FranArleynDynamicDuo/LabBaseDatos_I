@@ -1,0 +1,93 @@
+--------------------------------------------------------------------------------
+------------------------ PRE TALLER 2 ------------------------------------------
+--------------------------------------------------------------------------------
+
+
+---------------------------- PREGUNTA 1 ----------------------------------------
+
+-- A. Liste los nombres de las carreras en que alguno de los estudiantes tiene
+-- entre todas sus materias una nota promedio mayor o igual a 3.5 (observación 
+-- no se refiere al índice)
+
+    SELECT DISTINCT ca.nombre
+    FROM CARRERA ca,CURSA cu, ESTUDIANTE e
+    WHERE (e.idcarrera = ca.idcarrera)
+        AND (cu.carnet = e.carnet)
+    GROUP BY ca.nombre,e.carnet
+    HAVING (AVG(cu.nota) >= 3.5);
+    
+    
+
+---------------------------- PREGUNTA 2 ----------------------------------------
+
+-- B. Liste el carnet, apellido y nombre de aquellos estudiantes que, en el 
+-- trimestre septiembre-diciembre 2014, tengan un número de créditos inscritos
+-- entre 10 y 12 (ambos inclusive)   
+
+    SELECT e.carnet,e.nombres,e.apellidos
+    FROM ESTUDIANTE e,CURSA c, ASIGNATURA asig
+    WHERE (e.carnet = c.carnet)
+        AND (c.anio = '2014')
+        AND (c.trimestre = 'SEPTIEMBRE')
+        AND (c.codasig = asig.codasig)
+    GROUP BY e.carnet,e.nombres,e.apellidos
+    HAVING SUM(asig.creditos) BETWEEN 10 AND 12;
+
+---------------------------- PREGUNTA 3 ----------------------------------------
+
+-- C. Liste, por nombre de asignatura, el mínimo y máximo de notas obtenidas en
+-- el trimestre septiembre-diciembre 2014, restringido a las asignaturas del
+-- 'Departamento de Sociales'
+
+    SELECT a.nomasig, MAX(c.nota),MIN(c.nota)  
+    FROM ASIGNATURA a,CURSA c,ESTUDIANTE e, DEPARTAMENTO d
+    WHERE c.anio = 2014 
+        AND c.trimestre = 'SEPTIEMBRE' 
+        AND a.codasig = c.codasig
+        AND a.iddepartamento = d.iddepartamento
+        AND d.nomdpto = 'Departamento de Sociales'
+        AND c.carnet = e.carnet
+    GROUP BY a.nomasig;
+
+---------------------------- PREGUNTA 4 ----------------------------------------
+
+-- D. Liste los carnets, nombres y apellidos de los estudiantes con menor 
+-- indice de cada idcarrera
+
+    SELECT ep.idcarrera,ep.carnet,ep.nombres,ep.apellidos
+    FROM ESTUDIANTE ep
+    EXCEPT
+    SELECT e1.idcarrera,e1.carnet,e1.nombres,e1.apellidos
+    FROM ESTUDIANTE e1,ESTUDIANTE e2
+    WHERE (e1.idcarrera = e2.idcarrera)
+        AND (e1.indice > e2.indice)
+
+---------------------------- PREGUNTA 5 ----------------------------------------
+
+-- E. Liste las cédulas, nombres y apellidos de los profesores tales que algunas
+-- de las asignaturas que dicta son de Laboratorio
+
+    SELECT DISTINCT p.ciprof,p.nombres,p.apellidos
+    FROM PROFESOR p,DICTA dic,ASIGNATURA asig
+    WHERE p.ciprof = dic.ciprof
+        AND dic.codasig = asig.codasig
+        AND asig.tipo = 'Laboratorio'
+
+
+
+---------------------------- PREGUNTA 6 ----------------------------------------
+
+-- F. Liste carnet, nombres y apellidos de los estudiantes que no han cursado 
+-- alguna vez la asignatura 'Analisis de la Pintura'
+
+    SELECT ep.carnet,ep.nombres,ep.apellidos
+    FROM ESTUDIANTE ep
+    EXCEPT
+    SELECT e.carnet,e.nombres,e.apellidos
+    FROM ESTUDIANTE e, CURSA  cu, ASIGNATURA asig
+    WHERE (e.carnet = cu.carnet)
+        AND (cu.codasig = asig.codasig)
+        AND (asig.nomasig = 'Analisis de la Pintura')
+
+
+

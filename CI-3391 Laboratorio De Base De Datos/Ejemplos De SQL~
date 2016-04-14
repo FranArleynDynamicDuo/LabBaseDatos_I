@@ -1,0 +1,118 @@
+* Bloque Basico
+
+	Select <lista de atributos>
+	From<Lista de tablas>
+	Where <Condicion>
+	
+	Ejemplo: ¿Nombre de los libros de UNITLIT?
+
+		Libro(Nombrem,editorial, Codigo)
+
+			Select Nombre 
+			From Libro
+			Where editorial = 'UNILIT'
+	
+	Ejemplo: ¿Todos los atributos de los libros de UNILIT?
+
+		Select *	(* significa TODOS, en este caso, todos los atributos)
+		From Libro
+		Where editorial = UNILIT
+	
+	Ejemplo: ¿Precios con 20% de descuento?
+
+		* Semantica: Añade atributos calclados a la tabla resultante
+	
+		Select codlib,precio*0.8
+		FROM ofrece
+		WHERE riflib = 09748
+	
+		*Semantica: La usual de los operadoes
+
+	Ejemplo: ¿Librerias que venden el libro 672 a menos de 6000?
+
+		SELECT Riflib
+		FROM Ofrece
+		WHERE codlib = 762 AND precio < 6000
+	
+COMPARACION DE STRINGS
+
+		
+	
+	*Semantica: verifica el matching del patron
+	
+		_ cualquier caracter
+		% cualquier string
+	
+		_<atributo> LIKE <patron>
+				
+	Ejemplo: ¿titulos que terminan por Victoria?
+
+		SELECT Nombre
+		FROM LIBRO
+		WHERE nombre LIKE '%Victoria'
+	
+	Ejemplo: ¿titulos que contienen Victoria?
+
+		SELECT Nombre
+		FROM LIBRO
+		WHERE nombre LIKE '%Victoria%'	
+	
+	Ejemplo: ¿titulos que empiezan por Victoria?
+
+		SELECT Nombre
+		FROM LIBRO
+		WHERE nombre LIKE 'Victoria%'		
+		
+
+	
+DESIGNANTE DE ATRIBUTO
+
+	<TABLA>.<ATRIBUTO> (Para usar el atributo de alguna tabla)
+	
+	semantica: Identifica a cual tabla se refiere el atributo
+	
+AMBIGUEDAD DE ATRIBUTOS	
+	
+	Ejemplo: ¿Titulos que le gustan a quienes frecuentan elCLC?
+
+		SELECT LIBRO.nombre
+		FROM LIBRO,Gusta,Frecuenta,LIBRERIA
+		WHERE codigo=codlib
+			AND Gusta.cilec = Frecuenta.cilec
+			AND riflib = rif and LIBRERIA.nombre = CLC
+			
+ALIAS DE TABLAS
+
+	DESIGNANTE TABLA
+	
+		<Tabla> <Alias>
+		
+	*Semantica: - Identifica la tabla con el alias dentro del query
+	
+	Ejemplo: ¿Aparear cedulas de personas que frecuentan las mismas librerias?
+	
+		SELECT F1.cilec,F2.cilec
+		FROM Frecuenta F1, Frecuenta F2
+		WHERE F1.riflib = F2.riflib
+			AND F1.cilec < F2.cilec (Esta condicion hace que se eliminen las
+									 pares simetricos y los reflexivos)
+									 
+				
+ELIMINACION DE DUPLICADOS
+
+	VARIANTE DEL BLOQUE BASICO
+	
+		SELECT DISTINCT
+		
+	semantica: elimina los duplicados
+	
+	Ejemplo: ¿Titulos que les gustan a quienes frecuentan el CLC?
+	
+		SELECT DISTINCT LIBRO.nombre
+		FROM LIBRO, Gusta, Frecuenta, Libreria
+		WHERE codigo = codlib
+			AND Gusta.cilec = Frecuenta.cilec
+			AND riflib = rif AND LIBRERIA.nombre = CLC
+		
+		NOTA: CUIDADO, ES COSTOSO	
+		
